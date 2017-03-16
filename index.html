@@ -1,0 +1,297 @@
+<!doctype html class="full-height">
+<!--[if lt IE 7]>
+<html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
+<!--[if IE 7]>
+<html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
+<!--[if IE 8]>
+<html class="no-js lt-ie9" lang=""> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang=""> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+
+    <!-- Material Design fonts -->
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700">
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/icon?family=Material+Icons">
+
+    <!-- Load c3.css -->
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css"/>
+    <link href="css/vendor/c3.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Bootstrap Material Design -->
+    <link rel="stylesheet" type="text/css" href="css/vendor/bootstrap-material-design.css">
+    <link rel="stylesheet" type="text/css" href="css/vendor/ripples.min.css">
+    <link rel="stylesheet" href="css/main.css">
+
+    <script src="js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
+</head>
+<body class="full-height">
+<!--[if lt IE 8]>
+<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
+    your browser</a> to improve your experience.</p>
+<![endif]-->
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                        aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">IoT Devs</a>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="collapse navbar-collapse" id="navbar">
+                <ul class="nav navbar-nav">
+                    <li><a href="javascript: void(0);" data-toggle="modal" data-target="#servers-dialog">Servers</a>
+                    </li>
+                    <li><a href="#">Import Configuration</a></li>
+                    <li><a href="#">Export Configuration</a></li>
+                </ul>
+                <ul class="nav navbar-nav" style="float: right">
+                    <li class="pull-right"><a href="#">Documentation</a></li>
+                    <li class="pull-right"><a href="#">Settings</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="full-height">
+    <div class="col-md-3 full-height p-r-n m-n p-n">
+        <div class="panel panel-default full-height">
+            <div class="panel-body full-height accordion" id="accordionDevs">
+                <div id="daterange" class="form-control">
+                    <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                    <span></span> <i class="glyphicon glyphicon-chevron-down pull-right"></i>
+                </div>
+                <div class="row panel">
+                    <div class="col-md-6">
+                        <button data-target="#new-device-area" class="btn btn-info" data-toggle="collapse"
+                                data-parent="#accordionDevs"><i class="glyphicon glyphicon-plus"></i> New device
+                        </button>
+                    </div>
+                    <div class="col-md-6">
+                        <button data-target="#devices-list" class="btn btn-info" data-toggle="collapse"
+                                data-parent="#accordionDevs"><i class="glyphicon glyphicon-list"></i> List devices
+                        </button>
+                    </div>
+                </div>
+                <div class="panel row">
+                    <div id="devices-list" class="col-md-12 list-group collapse in">
+                        <div class="alert alert-dismissible alert-danger">
+                            <button type="button" class="close" data-dismiss="alert">×</button>
+                            <strong>Oh snap!</strong> No device registered.
+                        </div>
+                    </div>
+                    <div id="new-device-area" class="col-md-12 collapse">
+                        <input type="text" class="form-control" name="devName" placeholder="Name">
+                        <input type="text" class="form-control" name="devLoc" placeholder="Location">
+                        <select class="form-control" name="devServer">
+                        </select>
+                        <input type="text" class="form-control" name="devDB" placeholder="Database">
+                        <input type="text" class="form-control" name="devQuery" placeholder="Database Query">
+                        <select class="form-control" name="devType">
+                            <option value="-1">Device Type</option>
+                        </select>
+                        <input type="text" class="form-control" name="devUnit" placeholder="Measuring Unit">
+                        <a href="javascript:void(0)" class="btn btn-success btn-raised btn-block" id="add-device">
+                            <i class="glyphicon glyphicon-plus"></i> Add device
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-9 full-height m-n p-n" id="map">
+
+    </div>
+</div>
+
+<div id="complete-dialog" class="modal fade" tabindex="-1" style="display: none;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Complete data chart</h4>
+            </div>
+            <div class="modal-body">
+                <div id="full_chart"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Dismiss</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="edit-device" class="modal fade" tabindex="-1" style="display: none;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Edit device</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="col-md-2 control-label">Name</label>
+                    <div class="col-md-10">
+                        <input type="text" class="form-control" name="devName" placeholder="Name" disabled>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 control-label">Location</label>
+                    <div class="col-md-10">
+                        <input type="text" class="form-control" name="devLoc" placeholder="Location">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 control-label">Server</label>
+                    <div class="col-md-10">
+                        <select class="form-control" name="devServer">
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 control-label">Database</label>
+                    <div class="col-md-10">
+                        <input type="text" class="form-control" name="devDB" placeholder="Database">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 control-label">Query</label>
+                    <div class="col-md-10">
+                        <input type="text" class="form-control" name="devQuery" placeholder="Database Query">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 control-label">Type</label>
+                    <div class="col-md-10">
+                        <select class="form-control" name="devType">
+                            <option value="-1">Device Type</option>
+                        </select></div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 control-label">Measuring Unit</label>
+                    <div class="col-md-10">
+                        <input type="text" class="form-control" name="devUnit" placeholder="Measuring Unit"></div>
+                </div>
+                <div class="clearfix">&nbsp;</div>
+                <div class="row m-t-m">
+                    <div class="col-md-6">
+                        <a href="javascript:void(0)" class="btn btn-success btn-raised btn-block"
+                           id="update-device">
+                            <i class="glyphicon glyphicon-floppy"></i> Save device data
+                        </a>
+                    </div>
+                    <div class="col-md-6">
+                        <a href="javascript:void(0)" class="btn btn-danger btn-raised btn-block"
+                           id="remove-device">
+                            <i class="glyphicon glyphicon-remove-sign"></i> Delete device
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Dismiss</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="servers-dialog" class="modal fade" tabindex="-1" style="display: none;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 class="modal-title">Servers Management</h3>
+            </div>
+            <div class="modal-body">
+                <table id="servers-list" class="table table-striped table-hover">
+
+                </table>
+                <div class="row">
+                    <div class="col-md-4">
+                        <button type="button" class="btn btn-primary" id="new-server" data-toggle="collapse"
+                                data-target="#new-sv-area"><i class="glyphicon glyphicon-hdd"></i> New server
+                        </button>
+                    </div>
+                </div>
+                <div class="row collapse" id="new-sv-area">
+                    <div class="col-md-6 col-xs-12">
+                        <input type="text" class="form-control" name="name" placeholder="Name" autocomplete="false"
+                               tabindex="1">
+                        <input type="text" class="form-control" name="username" placeholder="Username" tabindex="3"
+                               autocomplete="false">
+                        <a href="javascript:void(0)" id="add-server" tabindex="5"
+                           class="btn btn-success btn-lg btn-block btn-raised"> <i
+                                class="glyphicon glyphicon-plus"></i> Add Server
+                            <div class="ripple-container"></div>
+                        </a>
+                    </div>
+                    <div class="col-md-6 col-xs-12">
+                        <input type="text" class="form-control" name="url" autocomplete="false" tabindex="2"
+                               placeholder="URL (ex: http://127.0.0.1/humidity)">
+                        <input type="password" class="form-control" name="password" placeholder="Password"
+                               autocomplete="false" tabindex="4">
+                        <a href="javascript:void(0)" class="btn btn-primary btn-lg btn-block btn-raised"
+                           data-toggle="collapse" data-target="#new-sv-area" tabindex="6"><i
+                                class="glyphicon glyphicon-remove"></i>
+                            Cancel
+                            <div class="ripple-container"></div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Dismiss</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="notifications-area">
+</div>
+
+
+<script async defer type="text/javascript"
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKQqo1jNNq0hwzKhL_hRof0bft562M2qk">
+</script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
+<script src="js/vendor/bootstrap.min.js"></script>
+
+<script src="js/vendor/material.js"></script>
+<script src="js/vendor/ripples.min.js"></script>
+
+<!-- Load d3.js and c3.js -->
+<script src="js/vendor/d3.v3.min.js" charset="utf-8"></script>
+<script src="js/vendor/c3.min.js"></script>
+
+<script>
+    $.material.init();
+</script>
+<script src="js/server.js"></script>
+<script src="js/device.js"></script>
+<script src="js/notifications.js"></script>
+<script src="js/maps.js"></script>
+<script src="js/config.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/main.js"></script>
+
+</body>
+</html>

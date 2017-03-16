@@ -1,0 +1,23 @@
+todo:
+1. need more data
+
+2. how to save devices data?
+
+3. device data = 
+	{
+		name,
+		location,
+		query,
+		username,
+		password,
+		unitate de masura, 
+		type
+	}
+
+4. save device conf in local storage
+
+5. export/import json config
+
+6. filter devices 
+
+7. compare: checkbox pe fiecare modul cu view in lateral si adaugat pe chart
