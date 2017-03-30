@@ -43,6 +43,9 @@ $(window).load(function () {
                 var device = Config.getDevice(this.indexValue);
                 rawData[device.name] = data;
                 addDeviceOnMap(device);
+                console.log(data);
+                console.log(device.query);
+                console.log(server.url);
             }
         });
     }

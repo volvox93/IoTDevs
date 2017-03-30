@@ -120,11 +120,54 @@ var Config = new function () {
     };
 
     this.export = function () {
-        // todo
-    };
+        var button = document.createElement("a");
+        button.setAttribute("href", "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(this.configuration)));
+        button.setAttribute("download", "iotDev.json");
+        if (document.createEvent) {
+            var event = document.createEvent('MouseEvents');
+            event.initEvent('click', true, true);
+            button.dispatchEvent(event);
+        }
+        else {
+            button.click();
+        }
+
+        Notifications.show("Exported to iotDev.json.", Notifications.types.success);
+        if (DEBUG) console.log('Exported');
+    }
+
+    this.__async_readFile = function (evt) {
+           var files = evt.target.files;
+           var file = files[0];
+           var reader = new FileReader();
+           reader.onload = function() {
+                result = Config.configuration;
+                try {
+                    result = JSON.parse(this.result);
+                }
+                catch (err) {
+                    Notifications.show("Cannot load from input. Discarding file. <br>" + (DEBUG ? err.message : ''),
+                        Notifications.types.error);
+                    if (DEBUG) {
+                        console.log("Cannot load from input. Discarding file. Logging error.");
+                        console.log(err);
+                    }
+                    return;
+                }
+                // TODO: validate the user input
+                Config.configuration = result;
+                Config.save();
+                Notifications.show("Loaded the data <br>", Notifications.types.success);
+                updateDevices();
+           }
+           reader.readAsText(file)
+        }
 
     this.import = function () {
-        // todo
+        var input = document.createElement("input");
+        input.setAttribute("type", "file");
+        input.addEventListener('change', this.__async_readFile, false);
+        input.click();
     }
 
 };

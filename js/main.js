@@ -65,6 +65,17 @@ $(document).ready(function () {
 
     });
 
+    $('#export-conf').click(function () {
+        console.log("called");
+        Config.export();
+    });
+
+    $('#import-conf').click(function () {
+        console.log("called");
+        Config.import();
+    });
+
+
     var devOpts = $('select[name=devType]');
     // update options on device type
     for (var key in DeviceTypesEnumerator)
