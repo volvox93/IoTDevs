@@ -75,6 +75,17 @@ $(document).ready(function () {
         Config.import();
     });
 
+    $('#signin').click(function () {
+    // Ideally the button should only show up after gapi.client.init finishes, so that this
+    // handler won't be called before OAuth is initialized.
+    console.log("sign in called");
+    gapi.auth2.getAuthInstance().signIn();
+    updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+    });
+
+    $('#signout').click(function () {
+    gapi.auth2.getAuthInstance().signOut();
+    });
 
     var devOpts = $('select[name=devType]');
     // update options on device type
@@ -139,6 +150,58 @@ var updateDevices = function () {
 
 };
 
+
+function handleClientLoad() {
+// Loads the client library and the auth2 library together for efficiency.
+// Loading the auth2 library is optional here since `gapi.client.init` function will load
+// it if not already loaded. Loading it upfront can save one network request.
+console.log("clientLoad");
+gapi.load('client', initClient);
+}
+
+function initClient() {
+    console.log("inhit");
+    var e = function (e){
+        console.log(e);
+    }
+    // Initialize the client with API key and People API, and initialize OAuth with an
+    // OAuth 2.0 client ID and scopes (space delimited string) to request access.
+    // how the fuck do we secure this?????
+    initObject = {
+    apiKey: "AIzaSyAPx5DK84REltBzWDghI1vlcu_x6Lbw-y8",
+    discoveryDocs: ["https://people.googleapis.com/$discovery/rest?version=v1"],
+    clientId: "117782266021-80a0v77h09kaccfgiava1a7dpker9ue5.apps.googleusercontent.com",
+    scope: 'profile'
+    };
+    gapi.client.init(initObject).then(function () {
+    // Listen for sign-in state changes.
+    gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
+
+    // Handle the initial sign-in state.
+    updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+    }, e, e); 
+
+}
+
+function updateSigninStatus(isSignedIn) {
+    // When signin status changes, this function is called.
+    // If the signin status is changed to signedIn, we make an API call.
+    if (isSignedIn) {
+    makeApiCall();
+    }
+}
+
+function makeApiCall() {
+    // Make an API call to the People API, and print the user's given name.
+    gapi.client.people.people.get({
+    resourceName: 'people/me'
+    }).then(function(response) {
+    console.log('Hello, ' + response.result.names[0].givenName);
+    }, function(reason) {
+    console.log('Error: ' + reason.result.error.message);
+    });
+}
+
 var editDevice = function (devName) {
     var device = Config.getDevice(devName);
     var editor = $('#edit-device');
@@ -187,8 +250,6 @@ var updateServers = function () {
         svList.append(opt);
     }
 };
-
-
 
 $('#complete-dialog').on('shown.bs.modal', function () {
     var devName = $('#currentMiniChart').text();
