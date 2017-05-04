@@ -21,3 +21,5 @@ todo:
 6. filter devices 
 
 7. compare: checkbox pe fiecare modul cu view in lateral si adaugat pe chart
+
+8. do a cleanup of all the data before we parse them

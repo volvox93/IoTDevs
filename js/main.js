@@ -254,13 +254,13 @@ var updateServers = function () {
 $('#complete-dialog').on('shown.bs.modal', function () {
     var devName = $('#currentMiniChart').text();
 
-    var chart = c3.generate({
+    generateObjectSource = {
         bindto: '#full_chart',
         data: {
             x: 'x',
             xFormat: '%Y-%d-%m %H:%M:%S',
-            columns: fullColumns[devName],
-            type: 'area-spline'
+            columns: targetColumns[devName],
+            type: 'area'
         },
         axis: {
             x: {
@@ -269,8 +269,20 @@ $('#complete-dialog').on('shown.bs.modal', function () {
                     format: '%y-%m-%d %H:%M:%S'
                 }
             }
+        }, 
+        zoom: {
+            enabled: true,
+            rescale: true/*,
+            onzoom: function (domain) {
+                console.log(domain);
+                targetColumns[devName] = get10(devName, domain)
+                chart.unload();
+                chart.load(generateObjectSource);
+                //chart.zoom(domain);
+            }*/
         }
-    });
+    }
+    var chart = c3.generate(generateObjectSource);
 });
 
 var initDays = 29;

@@ -8,6 +8,7 @@ var parsedData = {};
 var minifiedData = {};
 var infowindow;
 var fullColumns = {};
+var targetColumns = {};
 
 $(window).load(function () {
     // init map & stuff
@@ -51,6 +52,39 @@ $(window).load(function () {
     }
 
 });
+
+var get10 = function(deviceName, domain){
+    // get the last 10 values
+    console.log(domain);
+
+    var x_l_axis = [];
+    var y_l_axis = [];
+
+    x_axis = fullColumns[deviceName][0];
+    y_axis = fullColumns[deviceName][1];
+    var target = 25;
+    last = x_axis.length;
+    if(target < last){
+        target = last;
+    }
+    i = 0;
+    var l_val = null;
+    for(i = 0; i < x_axis.length-1; i+= x_axis.length/10){
+        if(y_axis[i] !== undefined && x_axis[i] !== undefined){
+            y_l_axis.push(y_axis[i]);
+            x_l_axis.push(x_axis[i]);
+        }
+    }
+    
+    if(y_axis[last] !== undefined && x_axis[last] !== undefined){
+        y_l_axis.push(y_axis[last]);
+        x_l_axis.push(x_axis[last]);
+    }
+    x_l_axis.unshift('x');
+    y_l_axis.unshift(deviceName);
+    console.log([x_l_axis. y_l_axis]);
+    return [x_l_axis, y_l_axis];
+}
 
 var addDeviceOnMap = function (device) {
     // first parse the data
@@ -146,7 +180,7 @@ var addDeviceOnMap = function (device) {
                             minifiedData[devId].x,
                             minifiedData[devId].y
                         ],
-                        type: 'area-spline'
+                        type: 'area'
                     },
                     axis: {
                         x: {
@@ -165,6 +199,10 @@ var addDeviceOnMap = function (device) {
     y_axis.unshift(device.name);
 
     fullColumns[device.name] = [x_axis, y_axis];
+    targetColumns[device.name] = get10(device.name);
+    console.log("ladydoo ladydaaa");
+    console.log(minifiedData[device.name]);
+    console.log(targetColumns[device.name]);
 
     autoCenter();
 
