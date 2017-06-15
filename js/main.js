@@ -66,12 +66,10 @@ $(document).ready(function () {
     });
 
     $('#export-conf').click(function () {
-        console.log("called");
         Config.export();
     });
 
     $('#import-conf').click(function () {
-        console.log("called");
         Config.import();
     });
 
@@ -253,36 +251,8 @@ var updateServers = function () {
 
 $('#complete-dialog').on('shown.bs.modal', function () {
     var devName = $('#currentMiniChart').text();
-
-    generateObjectSource = {
-        bindto: '#full_chart',
-        data: {
-            x: 'x',
-            xFormat: '%Y-%d-%m %H:%M:%S',
-            columns: targetColumns[devName],
-            type: 'area'
-        },
-        axis: {
-            x: {
-                type: 'timeseries',
-                tick: {
-                    format: '%y-%m-%d %H:%M:%S'
-                }
-            }
-        }, 
-        zoom: {
-            enabled: true,
-            rescale: true/*,
-            onzoom: function (domain) {
-                console.log(domain);
-                targetColumns[devName] = get10(devName, domain)
-                chart.unload();
-                chart.load(generateObjectSource);
-                //chart.zoom(domain);
-            }*/
-        }
-    }
-    var chart = c3.generate(generateObjectSource);
+    chartTheseColumns('#full_chart', targetColumns[devName]);
+    
 });
 
 var initDays = 29;

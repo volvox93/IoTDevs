@@ -5,12 +5,12 @@ var markers = [];
 var info = [];
 var rawData = {};
 var parsedData = {};
-var minifiedData = {};
+var minifiedData = [];
 var infowindow;
 var fullColumns = {};
 var targetColumns = {};
 
-$(window).load(function () {
+var maps_redraw = function () {
     // init map & stuff
     map = new google.maps.Map(document.getElementById('map'), {
         zoom: 12,
@@ -51,7 +51,9 @@ $(window).load(function () {
         });
     }
 
-});
+}
+
+$(window).load(maps_redraw);
 
 var get10 = function(deviceName, domain){
     // get the last 10 values
@@ -161,36 +163,14 @@ var addDeviceOnMap = function (device) {
     x_l_axis.unshift('x');
     y_l_axis.unshift(device.name);
 
-    minifiedData[device.name] = {
-        x: x_l_axis,
-        y: y_l_axis
-    };
-
+    minifiedData[device.name] = [x_l_axis, y_l_axis];
 
     google.maps.event.addListener(infowindow, 'domready', (function (devId) {
         return function () {
             var devName = $('#currentMiniChart').text();
+
             if (devName == devId) {
-                var chart = c3.generate({
-                    bindto: '#chart_mini',
-                    data: {
-                        x: 'x',
-                        xFormat: '%Y-%d-%m %H:%M:%S',
-                        columns: [
-                            minifiedData[devId].x,
-                            minifiedData[devId].y
-                        ],
-                        type: 'area'
-                    },
-                    axis: {
-                        x: {
-                            type: 'timeseries',
-                            tick: {
-                                format: '%y-%m-%d %H:%M:%S'
-                            }
-                        }
-                    }
-                });
+                chartTheseColumns('#chart_mini', minifiedData[devId]);
             }
         }
     })(device.name));
@@ -199,9 +179,9 @@ var addDeviceOnMap = function (device) {
     y_axis.unshift(device.name);
 
     fullColumns[device.name] = [x_axis, y_axis];
-    targetColumns[device.name] = get10(device.name);
-    console.log("ladydoo ladydaaa");
-    console.log(minifiedData[device.name]);
+    targetColumns[device.name] = fullColumns[device.name];
+    //targetColumns[device.name] = get10(device.name);
+    console.log(fullColumns[device.name]);
     console.log(targetColumns[device.name]);
 
     autoCenter();

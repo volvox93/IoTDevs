@@ -159,6 +159,7 @@ var Config = new function () {
                 Config.save();
                 Notifications.show("Loaded the data <br>", Notifications.types.success);
                 updateDevices();
+                maps_redraw();
            }
            reader.readAsText(file)
         }
