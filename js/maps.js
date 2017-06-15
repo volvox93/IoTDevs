@@ -152,9 +152,9 @@ var addDeviceOnMap = function (device) {
     i = 0;
     var l_val = null;
     while (x_l_axis.length <= last && i < x_axis.length) {
-        if (y_axis[i] != l_val) {
-            l_val = y_axis[i];
-            y_l_axis.push(l_val);
+        if (x_axis[i] != l_val) {
+            l_val = x_axis[i];
+            y_l_axis.push(y_axis[i]);
             x_l_axis.push(x_axis[i]);
         }
         i++;
