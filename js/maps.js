@@ -121,8 +121,9 @@ var addDeviceOnMap = function (device) {
         '<div class="col-md-6"><a href="javascript:void(0)" class="btn btn-success" disabled>Data variation</a></div>' +
         '<div class="col-md-6"><button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#complete-dialog">View complete data</button></div>' +
         '</div>' +
-        '<div id="chart_mini" class="map-chart">' +
-        '</div>' +
+        //'<div id="chart_mini" class="map-chart">' +
+        '<svg id="chart_mini" width="960" height="500"></svg>'
+        //'</div>' +
         '<div class="">' +
         '<label><input type="checkbox" data-target="' + device.name + '"> Add to compare</label>' +
         '</div>';
